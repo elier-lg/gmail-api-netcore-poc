@@ -1,0 +1,6 @@
+/APITokenCredentials/*
+/bin
+/obj
+/.vscode
+*.txt
+credentials.json
