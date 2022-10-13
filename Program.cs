@@ -94,9 +94,7 @@ namespace gmail_netcore_pof
             if (result.Messages != null)
             {
 
-                //ThreadPool.QueueUserWorkItem()
-
-                 foreach (var msg in result.Messages)
+                 foreach (Message msg in result.Messages)
                  {
                     var task = Task.Run(async () =>
                     {
@@ -104,9 +102,8 @@ namespace gmail_netcore_pof
                                                 System.Threading.Thread.CurrentThread.ManagedThreadId);
                         try
                         {
-                            Message m = (Message)msg;
-                            var Message = service.Users.Messages.Get(hostEmailAddress, m.Id);
-                            Message msgContent = await Message.ExecuteAsync();
+                            var message = service.Users.Messages.Get(hostEmailAddress, msg.Id);
+                            Message msgContent = await message.ExecuteAsync();
                             string subject = msgContent.Payload.Headers.FirstOrDefault(h => h.Name == "Subject").Value;
                             list.Add(subject);
                         }
@@ -116,31 +113,20 @@ namespace gmail_netcore_pof
                             {
                                 Console.WriteLine("Ooppss");
                             }
-                        }
-                        await Task.Delay(100);
+                        }                       
                     });
                     tasksList.Add(task);
                  }
 
                 await Task.WhenAll(tasksList.ToArray());
 
-                
-
-               /* foreach (var msg in result.Messages)
-                {
-                    var Message = service.Users.Messages.Get(hostEmailAddress, msg.Id);
-                    Message msgContent = await Message.ExecuteAsync();
-                    string subject = msgContent.Payload.Headers.FirstOrDefault(h => h.Name == "Subject").Value;
-                    Console.WriteLine(subject);
-                    list.Add(subject);
-
-                }*/
-
-                Console.WriteLine(list.Count);
                 foreach (var item in list)
                 {
                     Console.WriteLine(item);
                 }
+
+                Console.WriteLine(list.Count);
+
             }
 
             return newNextPageToken;
