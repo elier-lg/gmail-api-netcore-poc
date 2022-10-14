@@ -11,8 +11,8 @@ namespace gmail_netcore_pof
     {
         const string apiKey = "AIzaSyAyLBX_GK6vFFqhUOxJ__NY6e7n2rMwk38";
         const string hostEmailAddress = "me";
-        public static GmailService service = new GmailService();
-        public static List<String> list = new List<string>();
+        public static GmailService service = new();
+        public static List<string> list = new();
         static async Task Main(string[] args)
         {
             Console.WriteLine("Discovery API Sample");
@@ -32,7 +32,26 @@ namespace gmail_netcore_pof
                 //    pageCounter++;
                 //Console.Write($"MESSAGES PAGE: {pageCounter} --------------------------------");
                 await instance.GetMessages("");
-                //}
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+                await instance.GetMessages("");
+
+
                 timer.Stop();
                 TimeSpan timeTaken = timer.Elapsed;
                 Console.WriteLine("TEMPO TOTAL !!!: " + timeTaken.ToString(@"m\:ss\.fff"));
@@ -93,39 +112,41 @@ namespace gmail_netcore_pof
             var tasksList = new List<Task>(result.Messages.Count);
             if (result.Messages != null)
             {
-
-                 foreach (Message msg in result.Messages)
-                 {
+                Console.WriteLine("Antes = " + result.Messages.Count);
+                foreach (Message msg in result.Messages)
+                {
                     var task = Task.Run(async () =>
                     {
-                        Console.WriteLine("Application thread ID: {0}",
-                                                System.Threading.Thread.CurrentThread.ManagedThreadId);
+                        //Console.WriteLine("Application thread ID: {0}",
+                        //                        System.Threading.Thread.CurrentThread.ManagedThreadId);
                         try
                         {
                             var message = service.Users.Messages.Get(hostEmailAddress, msg.Id);
                             Message msgContent = await message.ExecuteAsync();
                             string subject = msgContent.Payload.Headers.FirstOrDefault(h => h.Name == "Subject").Value;
-                            list.Add(subject);
+                            lock (list) { list.Add(subject); };
                         }
                         catch (Google.GoogleApiException e)
-                        {                            
+                        {
                             if (e.HttpStatusCode == System.Net.HttpStatusCode.TooManyRequests)
                             {
                                 Console.WriteLine("Ooppss");
                             }
-                        }                       
+                        }
                     });
                     tasksList.Add(task);
-                 }
+                }
 
                 await Task.WhenAll(tasksList.ToArray());
 
-                foreach (var item in list)
-                {
-                    Console.WriteLine(item);
-                }
 
-                Console.WriteLine(list.Count);
+                var fileName = $"{DateTime.Now.Millisecond}-{DateTime.Now.Millisecond}.txt";
+                
+                list.Sort();
+                File.WriteAllLines(fileName, list);
+
+                Console.WriteLine("Depois = " + list.Count);
+                list.Clear();
 
             }
 
