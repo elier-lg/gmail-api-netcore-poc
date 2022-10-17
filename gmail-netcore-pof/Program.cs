@@ -37,28 +37,28 @@ namespace gmail_netcore_pof
       Console.ReadKey();
     }
 
-    private async Task GetAPIS()
-    {
-      // Create the service.
-      var service = new DiscoveryService(new BaseClientService.Initializer
-      {
-        ApplicationName = "Discovery Sample",
-        ApiKey = apiKey,
-      });
+    //  private async Task GetAPIS()
+    //   {
+    //     // Create the service.
+    //     var service = new DiscoveryService(new BaseClientService.Initializer
+    //     {
+    //       ApplicationName = "Discovery Sample",
+    //       ApiKey = apiKey,
+    //     });
 
-      // Run the request.
-      Console.WriteLine("Executing a list request...");
-      var result = await service.Apis.List().ExecuteAsync();
+    //     // Run the request.
+    //     Console.WriteLine("Executing a list request...");
+    //     var result = await service.Apis.List().ExecuteAsync();
 
-      // Display the results.
-      if (result.Items != null)
-      {
-        foreach (DirectoryList.ItemsData api in result.Items)
-        {
-          Console.WriteLine(api.Id + " - " + api.Title);
-        }
-      }
-    }
+    //     // Display the results.
+    //     if (result.Items != null)
+    //     {
+    //       foreach (DirectoryList.ItemsData api in result.Items)
+    //       {
+    //         Console.WriteLine(api.Id + " - " + api.Title);
+    //       }
+    //     }
+    //   }
 
     private async Task<string> GetMessages(string? nextPageToken = null)
     {

@@ -1,6 +1,8 @@
-/APITokenCredentials/*
-/bin
-/obj
+*/APITokenCredentials/*
+*/bin
+*/obj
 /.vscode
 *.txt
+*/credentials.json
 credentials.json
+*/serilog/*
