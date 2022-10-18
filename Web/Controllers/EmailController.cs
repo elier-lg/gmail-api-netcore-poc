@@ -9,18 +9,18 @@ namespace Web.Controllers
   [Route("[controller]")]
   public class EmailController : ControllerBase
   {
-    private readonly IGMailApiService _gmailService;
+    private readonly IGMailApiService _gmailApiService;
 
     public EmailController(IGMailApiService gMailService)
     {
-      _gmailService = gMailService;
+      _gmailApiService = gMailService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetEmails(EmailsFiltersIn filters)
     {
       Log.Information($"Get emails:  {JsonSerializer.Serialize(filters)}");
-      var resp = await _gmailService.GetEmails(filters);
+      var resp = await _gmailApiService.GetEmails(filters);
       return Ok(resp);
     }
 
@@ -29,7 +29,8 @@ namespace Web.Controllers
     public async Task<IActionResult> GetEmail(string id)
     {
       Log.Information($"Get email: {id}");
-      return Ok(id);
+      var res = await _gmailApiService.GetEmail(id);
+      return Ok(res);
     }
   }
 }
